@@ -1,0 +1,19 @@
+{
+   "makefile.configureOnOpen": false,
+   "makefile.configurations": [
+   {
+      "name": "Default",
+      "makeArgs": []
+   }
+   ],
+   "makefile.launchConfigurations": [
+   {
+      "name": "Run MAKE EMU",
+      "cwd": "${workspaceFolder}",
+      "binaryPath": "C:\\Program Files (x86)\\GnuWin32\\bin\\make.exe",
+      "binaryArgs": [
+         "emu"
+      ]
+   }
+ ]
+}

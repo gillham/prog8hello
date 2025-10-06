@@ -8,17 +8,19 @@ ifeq ($(OS),Windows_NT)
     CP = copy
     RM = del /Q
     MD = mkdir
+    SEP = \\
 else
     CLEAN = rm -f build/*
     CP = cp -p
     RM = rm -f
     MD = mkdir -p
+    SEP = /
 endif
 
 # disk image settings
 DISKTYPE=d64
 DISKNAME=hello
-DISK=build/$(DISKNAME).$(DISKTYPE)
+DISK=build$(SEP)$(DISKNAME).$(DISKTYPE)
 
 # Emulator settings
 EMU_CMD=x64sc
@@ -43,17 +45,17 @@ SRCS	= src/main.p8
 all: build $(PROGS)
 
 build:
-	$(MD) build/
+	$(MD) build
 
 build/main.prg: $(SRCS)
 	$(PCC) $(PCCARGSC64) $<
 
 clean:
-	$(RM) build/*
+	$(RM) build$(SEP)*
 
 disk:
 	c1541 -format $(DISKNAME),52 $(DISKTYPE) $(DISK) > /dev/null
-	c1541 -attach $(DISK) -write build/main.prg hello,p > /dev/null
+	c1541 -attach $(DISK) -write build$(SEP)main.prg hello,p > /dev/null
 
 emu:	all disk
 	$(EMU)

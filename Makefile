@@ -20,7 +20,7 @@ endif
 # disk image settings
 DISKTYPE=d64
 DISKNAME=hello
-DISK=build$(SEP)$(DISKNAME).$(DISKTYPE)
+DISK=build/$(DISKNAME).$(DISKTYPE)
 
 # Emulator settings
 EMU_CMD=x64sc
@@ -54,8 +54,8 @@ clean:
 	$(RM) build$(SEP)*
 
 disk:
-	c1541 -format $(DISKNAME),52 $(DISKTYPE) $(DISK) > /dev/null
-	c1541 -attach $(DISK) -write build$(SEP)main.prg hello,p > /dev/null
+	c1541 -format $(DISKNAME),52 $(DISKTYPE) $(DISK) 
+	c1541 -attach $(DISK) -write build/main.prg hello,p
 
 emu:	all disk
 	$(EMU)

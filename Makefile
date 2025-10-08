@@ -58,7 +58,7 @@ disk:
 	c1541 -attach $(DISK) -write build/main.prg hello,p
 
 emu:	all disk
-	$(EMU)
+	$(EMU) -autostartprgmode 1 build/main.prg
 
 #
 # end-of-file

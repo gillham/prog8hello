@@ -40,32 +40,36 @@ PCC=prog8c
 PCCARGSC64=-srcdirs src -asmlist -target c64 -out build
 PCCARGSX16=-srcdirs src -asmlist -target cx16 -out build
 
-PROGS	= build/main.prg
+PROGS	= build/main-c64.prg build/main-cx16.prg
 SRCS	= src/main.p8
 
-all: build $(PROGS)
+all: build $(PROGS) disk
 
 build:
 	$(MD) build
 
-build/main.prg: $(SRCS)
+build/main-c64.prg: $(SRCS)
 	$(PCC) $(PCCARGSC64) $<
+	mv build/main.prg build/main-c64.prg
 
 build/main-cx16.prg: $(SRCS)
 	$(PCC) $(PCCARGSX16) $<
+	mv build/main.prg build/main-cx16.prg
 
 clean:
 	$(RM) build$(SEP)*
 
-disk:	clean all
+disk:	build/main-c64.prg
 	c1541 -format $(DISKNAME),52 $(DISKTYPE) $(DISK) 
-	c1541 -attach $(DISK) -write build/main.prg hello,p
+	c1541 -attach $(DISK) -write build/main-c64.prg hello,p
 
-emu:	clean all disk
-	$(EMU) -autostartprgmode 1 build/main.prg
+emu:	emu-c64
 
-emu-cx16:	clean build/main-cx16.prg
-	x16emu -scale 2 -run -prg build/main.prg
+emu-c64:	build/main-c64.prg
+	$(EMU) -autostartprgmode 1 $<
+
+emu-cx16:	build/main-cx16.prg
+	x16emu -scale 2 -run -prg $<
 
 #
 # end-of-file
